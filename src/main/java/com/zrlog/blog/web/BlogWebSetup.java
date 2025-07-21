@@ -1,5 +1,8 @@
 package com.zrlog.blog.web;
 
+import com.google.gson.Gson;
+import com.hibegin.common.dao.dto.PageData;
+import com.hibegin.common.util.BeanUtil;
 import com.hibegin.common.util.IOUtil;
 import com.hibegin.common.util.LoggerUtil;
 import com.hibegin.common.util.StringUtils;
@@ -19,13 +22,24 @@ import com.zrlog.blog.web.interceptor.PwaInterceptor;
 import com.zrlog.blog.web.plugin.ArticleStatisticsPluginImpl;
 import com.zrlog.blog.web.plugin.BlogPageStaticSitePlugin;
 import com.zrlog.blog.web.plugin.TemplateDownloadPlugin;
+import com.zrlog.blog.web.util.Outline;
+import com.zrlog.blog.web.util.PagerUtil;
+import com.zrlog.blog.web.util.PagerVO;
 import com.zrlog.common.Constants;
 import com.zrlog.common.ZrLogConfig;
+import com.zrlog.common.vo.I18nVO;
+import com.zrlog.common.vo.Version;
+import com.zrlog.data.cache.vo.Archive;
+import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.data.cache.vo.HotLogBasicInfoEntry;
 import com.zrlog.plugin.Plugins;
 import com.zrlog.web.WebSetup;
+import org.apache.commons.dbutils.BasicRowProcessor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BlogWebSetup implements WebSetup {
@@ -56,6 +70,31 @@ public class BlogWebSetup implements WebSetup {
         } catch (Exception e) {
             LoggerUtil.getLogger(BlogWebSetup.class).info("Freemarker render error " + e.getMessage());
         }
+    }
+
+    public static class MyBasicRowProcessor extends BasicRowProcessor {
+        public static Map<String, Object> createMap() {
+            return createCaseInsensitiveHashMap(2);
+        }
+    }
+
+    private static void nativeJson(){
+        new Gson().toJson(new HotLogBasicInfoEntry());
+        new Gson().toJson(new BaseDataInitVO());
+        new Gson().toJson(new PageData<>());
+        new Gson().toJson(MyBasicRowProcessor.createMap());
+        ArrayList<Object> objects = new ArrayList<>();
+        objects.add(MyBasicRowProcessor.createMap());
+        new Gson().toJson(new PageData<>(0L, objects));
+        new Gson().toJson(new PageData<>(0L, new ArrayList<>(), 0L, 0L));
+        new Gson().toJson(new BaseDataInitVO.Statistics());
+        new Gson().toJson(new I18nVO());
+        new Gson().toJson(new Outline());
+        new Gson().toJson(new Version());
+        new Gson().toJson(PagerUtil.generatorPager("/all", 1, 20));
+        new Gson().toJson(new PagerVO.PageEntry());
+        new Gson().toJson(new Archive());
+        BeanUtil.cloneObject(MyBasicRowProcessor.createMap());
     }
 
     public BlogWebSetup(ZrLogConfig zrLogConfig, String contextPath) {
