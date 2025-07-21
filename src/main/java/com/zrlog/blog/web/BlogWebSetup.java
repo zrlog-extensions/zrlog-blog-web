@@ -3,6 +3,7 @@ package com.zrlog.blog.web;
 import com.hibegin.common.util.IOUtil;
 import com.hibegin.http.server.api.Interceptor;
 import com.zrlog.blog.web.config.BlogRouters;
+import com.zrlog.blog.web.config.ZrLogHttpRequestListener;
 import com.zrlog.blog.web.interceptor.BlogApiInterceptor;
 import com.zrlog.blog.web.interceptor.BlogPageInterceptor;
 import com.zrlog.blog.web.interceptor.BlogPluginInterceptor;
@@ -30,6 +31,7 @@ public class BlogWebSetup implements WebSetup {
                 IOUtil.getByteByInputStream(BlogWebSetup.class.getResourceAsStream(resource));
             }
         }
+        zrLogConfig.getServerConfig().addRequestListener(new ZrLogHttpRequestListener());
     }
 
     @Override
