@@ -35,7 +35,7 @@ public class BlogWebSetup implements WebSetup {
 
     private void nativeImage() {
         String[] resources = IOUtil.getStringInputStream(BlogWebSetup.class.getResourceAsStream("/resource.txt")).split("\n");
-        NativeImageUtils.doResourceLoadByResourceNames(Arrays.stream(resources).filter(StringUtils::isNotEmpty).collect(Collectors.toList()));
+        NativeImageUtils.doResourceLoadByResourceNames(Arrays.stream(resources).filter(StringUtils::isNotEmpty).map(e -> "/" + e).collect(Collectors.toList()));
 
         try {
             FreeMarkerUtil.init(PathUtil.getStaticFile(Constants.DEFAULT_TEMPLATE_PATH).getPath());
