@@ -1,6 +1,7 @@
 package com.zrlog.blog.web;
 
 import com.hibegin.common.util.IOUtil;
+import com.hibegin.common.util.StringUtils;
 import com.hibegin.http.server.api.Interceptor;
 import com.zrlog.blog.web.config.BlogRouters;
 import com.zrlog.blog.web.config.ZrLogHttpRequestListener;
@@ -28,6 +29,9 @@ public class BlogWebSetup implements WebSetup {
         if (zrLogConfig.getServerConfig().isNativeImageAgent()) {
             String[] resources = IOUtil.getStringInputStream(BlogWebSetup.class.getResourceAsStream("/resource.txt")).split("\n");
             for (String resource : resources) {
+                if (StringUtils.isEmpty(resource)) {
+                    continue;
+                }
                 IOUtil.getByteByInputStream(BlogWebSetup.class.getResourceAsStream(resource));
             }
         }

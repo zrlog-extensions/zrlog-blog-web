@@ -35,7 +35,6 @@ assets/css/font/vjs.woff
 assets/css/font/vjs.svg
 assets/css/font/vjs.eot
 assets/css/font/vjs.ttf
-assets/images/default-portrait.gif
 assets/js/video.js
 error/403.html
 error/500.html
