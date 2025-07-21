@@ -1,7 +1,7 @@
 .idea
 target
 lib
-install-web-starter.jar
+zrlog-blog-web-starter.jar
 sim.pid
 log
 pom.xml.versionsBackup
