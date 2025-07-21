@@ -51,7 +51,7 @@ public class BlogWebSetup implements WebSetup {
             ApplicationContext applicationContext = new ApplicationContext(zrLogConfig.getServerConfig());
             applicationContext.init();
             FreeMarkerUtil.renderToFM("empty", HttpRequestBuilder.buildRequest(HttpMethod.GET, "/", "",
-                    "", Constants.zrLogConfig.getRequestConfig(),
+                    "", zrLogConfig.getRequestConfig(),
                     applicationContext));
         } catch (Exception e) {
             LoggerUtil.getLogger(BlogWebSetup.class).info("Freemarker render error " + e.getMessage());
