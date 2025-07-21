@@ -78,7 +78,7 @@ public class BlogWebSetup implements WebSetup {
         }
     }
 
-    private static void nativeJson(){
+    private static void nativeJson() {
         new Gson().toJson(new HotLogBasicInfoEntry());
         new Gson().toJson(new BaseDataInitVO());
         new Gson().toJson(new PageData<>());
@@ -102,6 +102,7 @@ public class BlogWebSetup implements WebSetup {
         this.contextPath = contextPath;
         if (zrLogConfig.getServerConfig().isNativeImageAgent()) {
             nativeImage();
+            nativeJson();
         }
         zrLogConfig.getServerConfig().addRequestListener(new ZrLogHttpRequestListener());
     }
