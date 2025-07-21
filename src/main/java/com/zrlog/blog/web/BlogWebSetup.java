@@ -1,8 +1,14 @@
 package com.zrlog.blog.web;
 
 import com.hibegin.common.util.IOUtil;
+import com.hibegin.common.util.LoggerUtil;
 import com.hibegin.common.util.StringUtils;
+import com.hibegin.http.HttpMethod;
+import com.hibegin.http.server.ApplicationContext;
 import com.hibegin.http.server.api.Interceptor;
+import com.hibegin.http.server.util.FreeMarkerUtil;
+import com.hibegin.http.server.util.HttpRequestBuilder;
+import com.hibegin.http.server.util.PathUtil;
 import com.zrlog.blog.web.config.BlogRouters;
 import com.zrlog.blog.web.config.ZrLogHttpRequestListener;
 import com.zrlog.blog.web.interceptor.BlogApiInterceptor;
@@ -12,6 +18,7 @@ import com.zrlog.blog.web.interceptor.PwaInterceptor;
 import com.zrlog.blog.web.plugin.ArticleStatisticsPluginImpl;
 import com.zrlog.blog.web.plugin.BlogPageStaticSitePlugin;
 import com.zrlog.blog.web.plugin.TemplateDownloadPlugin;
+import com.zrlog.common.Constants;
 import com.zrlog.common.ZrLogConfig;
 import com.zrlog.plugin.Plugins;
 import com.zrlog.web.WebSetup;
@@ -23,17 +30,41 @@ public class BlogWebSetup implements WebSetup {
     private final ZrLogConfig zrLogConfig;
     private final String contextPath;
 
+    private void nativeImage() {
+        String[] resources = IOUtil.getStringInputStream(BlogWebSetup.class.getResourceAsStream("/resource.txt")).split("\n");
+        for (String resource : resources) {
+            if (StringUtils.isEmpty(resource)) {
+                continue;
+            }
+            IOUtil.getByteByInputStream(BlogWebSetup.class.getResourceAsStream(resource));
+        }
+
+        try {
+            FreeMarkerUtil.init(PathUtil.getStaticFile(Constants.DEFAULT_TEMPLATE_PATH).getPath());
+        } catch (Exception e) {
+            LoggerUtil.getLogger(BlogWebSetup.class).info("Freemarker init error " + e.getMessage());
+        }
+        try {
+            FreeMarkerUtil.initClassTemplate(Constants.DEFAULT_TEMPLATE_PATH);
+        } catch (Exception e) {
+            LoggerUtil.getLogger(BlogWebSetup.class).info("Freemarker init error " + e.getMessage());
+        }
+        try {
+            ApplicationContext applicationContext = new ApplicationContext(zrLogConfig.getServerConfig());
+            applicationContext.init();
+            FreeMarkerUtil.renderToFM("empty", HttpRequestBuilder.buildRequest(HttpMethod.GET, "/", "",
+                    "", Constants.zrLogConfig.getRequestConfig(),
+                    applicationContext));
+        } catch (Exception e) {
+            LoggerUtil.getLogger(BlogWebSetup.class).info("Freemarker render error " + e.getMessage());
+        }
+    }
+
     public BlogWebSetup(ZrLogConfig zrLogConfig, String contextPath) {
         this.zrLogConfig = zrLogConfig;
         this.contextPath = contextPath;
         if (zrLogConfig.getServerConfig().isNativeImageAgent()) {
-            String[] resources = IOUtil.getStringInputStream(BlogWebSetup.class.getResourceAsStream("/resource.txt")).split("\n");
-            for (String resource : resources) {
-                if (StringUtils.isEmpty(resource)) {
-                    continue;
-                }
-                IOUtil.getByteByInputStream(BlogWebSetup.class.getResourceAsStream(resource));
-            }
+            nativeImage();
         }
         zrLogConfig.getServerConfig().addRequestListener(new ZrLogHttpRequestListener());
     }
