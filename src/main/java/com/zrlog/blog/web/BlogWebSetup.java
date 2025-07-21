@@ -8,6 +8,7 @@ import com.hibegin.http.server.ApplicationContext;
 import com.hibegin.http.server.api.Interceptor;
 import com.hibegin.http.server.util.FreeMarkerUtil;
 import com.hibegin.http.server.util.HttpRequestBuilder;
+import com.hibegin.http.server.util.NativeImageUtils;
 import com.hibegin.http.server.util.PathUtil;
 import com.zrlog.blog.web.config.BlogRouters;
 import com.zrlog.blog.web.config.ZrLogHttpRequestListener;
@@ -23,7 +24,9 @@ import com.zrlog.common.ZrLogConfig;
 import com.zrlog.plugin.Plugins;
 import com.zrlog.web.WebSetup;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BlogWebSetup implements WebSetup {
 
@@ -32,12 +35,7 @@ public class BlogWebSetup implements WebSetup {
 
     private void nativeImage() {
         String[] resources = IOUtil.getStringInputStream(BlogWebSetup.class.getResourceAsStream("/resource.txt")).split("\n");
-        for (String resource : resources) {
-            if (StringUtils.isEmpty(resource)) {
-                continue;
-            }
-            IOUtil.getByteByInputStream(BlogWebSetup.class.getResourceAsStream(resource));
-        }
+        NativeImageUtils.doResourceLoadByResourceNames(Arrays.stream(resources).filter(StringUtils::isNotEmpty).collect(Collectors.toList()));
 
         try {
             FreeMarkerUtil.init(PathUtil.getStaticFile(Constants.DEFAULT_TEMPLATE_PATH).getPath());
