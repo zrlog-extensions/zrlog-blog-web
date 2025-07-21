@@ -1,0 +1,13 @@
+.idea
+target
+lib
+zrlog-blog-web-starter.jar
+sim.pid
+log
+pom.xml.versionsBackup
+conf/*.sql
+conf/sqlite-db.properties
+static
+cache
+conf/plugins
+static/

@@ -1,0 +1,25 @@
+package com.zrlog.blog.web.template.vo;
+
+import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.data.dto.ArticleDetailDTO;
+
+public class ArticleDetailPageVO extends BasePageInfo {
+
+    private ArticleDetailDTO log;
+
+    public ArticleDetailPageVO(ArticleDetailDTO log, BaseDataInitVO init) {
+        this.log = log;
+        this.init = init;
+    }
+
+    public ArticleDetailPageVO() {
+    }
+
+    public ArticleDetailDTO getLog() {
+        return log;
+    }
+
+    public void setLog(ArticleDetailDTO log) {
+        this.log = log;
+    }
+}
