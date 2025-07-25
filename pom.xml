@@ -39,14 +39,14 @@
     </scm>
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/zrlog-extensions/install-web</url>
+        <url>https://github.com/zrlog-extensions/zrlog-blog-web</url>
     </issueManagement>
 
     <dependencies>
         <dependency>
             <groupId>com.hibegin</groupId>
             <artifactId>zrlog-service</artifactId>
-            <version>3.2.16</version>
+            <version>3.2.25</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
