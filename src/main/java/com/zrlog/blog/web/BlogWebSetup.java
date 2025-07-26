@@ -116,6 +116,7 @@ public class BlogWebSetup implements WebSetup {
         interceptors.add(BlogPageInterceptor.class);
         //
         BlogRouters.configBlogRouter(zrLogConfig.getServerConfig().getRouter());
+        zrLogConfig.getServerConfig().addStaticResourceMapper("/assets", "/assets", BlogWebSetup.class::getResourceAsStream);
     }
 
     @Override
