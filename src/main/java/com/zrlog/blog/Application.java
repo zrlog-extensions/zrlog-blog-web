@@ -5,6 +5,7 @@ import com.hibegin.http.server.WebServerBuilder;
 import com.hibegin.http.server.api.HttpRequest;
 import com.hibegin.http.server.util.PathUtil;
 import com.zrlog.blog.web.BlogWebSetup;
+import com.zrlog.blog.web.plugin.TemplateDownloadPlugin;
 import com.zrlog.business.plugin.CacheManagerPlugin;
 import com.zrlog.business.plugin.PluginCorePluginImpl;
 import com.zrlog.common.Constants;
@@ -32,6 +33,10 @@ public class Application {
     public static void main(String[] args) {
         Constants.zrLogConfig = new DevZrLogConfig(7080, null, "");
         WebServerBuilder build = new WebServerBuilder.Builder().config(Constants.zrLogConfig).build();
+        build.addCreateSuccessHandle(() -> {
+            Constants.zrLogConfig.startPluginsAsync();
+            return null;
+        });
         build.start();
     }
 }
@@ -46,7 +51,7 @@ class DevZrLogConfig extends ZrLogConfig {
 
     @Override
     public DataSourceWrapper configDatabase() throws Exception {
-        super.configDatabase();
+        this.dataSource = super.configDatabase();
         cacheService = new CacheServiceImpl();
         return dataSource;
     }

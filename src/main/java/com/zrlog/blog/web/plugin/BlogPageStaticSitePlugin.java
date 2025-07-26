@@ -69,8 +69,8 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
     private void refreshFavicon() {
         FaviconBase64DTO faviconBase64DTO = new WebSite().faviconBase64DTO();
         faviconHandle(faviconBase64DTO.getFavicon_ico_base64(), Constants.FAVICON_ICO_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
-        faviconHandle(faviconBase64DTO.getFavicon_png_pwa_192_base64(), Constants.FAVICON_PNG_PWA_192_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
-        faviconHandle(faviconBase64DTO.getFavicon_png_pwa_512_base64(), Constants.FAVICON_PNG_PWA_512_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
+        //faviconHandle(faviconBase64DTO.getFavicon_png_pwa_192_base64(), Constants.FAVICON_PNG_PWA_192_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
+        //faviconHandle(faviconBase64DTO.getFavicon_png_pwa_512_base64(), Constants.FAVICON_PNG_PWA_512_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
     }
 
 
@@ -145,7 +145,7 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
         copyResourceToCacheFolder("/assets/css/hljs/dark.css");
         copyResourceToCacheFolder("/assets/css/hljs/light.css");
         //default avatar url
-        copyResourceToCacheFolder("/assets/images/default-portrait.gif");
+        //copyResourceToCacheFolder("/assets/images/default-portrait.gif");
         File faviconFile = PathUtil.getStaticFile("/favicon.ico");
         if (faviconFile.exists()) {
             try {

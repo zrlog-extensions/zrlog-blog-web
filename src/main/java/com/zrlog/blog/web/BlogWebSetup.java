@@ -18,6 +18,7 @@ import com.zrlog.blog.web.config.ZrLogHttpRequestListener;
 import com.zrlog.blog.web.interceptor.BlogApiInterceptor;
 import com.zrlog.blog.web.interceptor.BlogPageInterceptor;
 import com.zrlog.blog.web.interceptor.BlogPluginInterceptor;
+import com.zrlog.blog.web.interceptor.BlogStaticResourceInterceptor;
 import com.zrlog.blog.web.plugin.ArticleStatisticsPluginImpl;
 import com.zrlog.blog.web.plugin.BlogPageStaticSitePlugin;
 import com.zrlog.blog.web.plugin.TemplateDownloadPlugin;
@@ -110,6 +111,7 @@ public class BlogWebSetup implements WebSetup {
     public void setup() {
         List<Class<? extends Interceptor>> interceptors = zrLogConfig.getServerConfig().getInterceptors();
         interceptors.add(BlogPluginInterceptor.class);
+        interceptors.add(BlogStaticResourceInterceptor.class);
         interceptors.add(BlogApiInterceptor.class);
         interceptors.add(BlogPageInterceptor.class);
         //

@@ -7,3 +7,6 @@ log
 pom.xml.versionsBackup
 conf/*.sql
 conf/sqlite-db.properties
+static
+cache
+conf/plugins

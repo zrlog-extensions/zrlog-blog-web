@@ -33,6 +33,4 @@ assets/css/hljs/light.css
 assets/css/hljs/dark.css
 assets/css/video-js.css
 assets/js/video.js
-pwa/icon/favicon-192.png
-pwa/icon/favicon-512.png
 resource.txt
