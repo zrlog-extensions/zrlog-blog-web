@@ -68,9 +68,7 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
 
     private void refreshFavicon() {
         FaviconBase64DTO faviconBase64DTO = new WebSite().faviconBase64DTO();
-        faviconHandle(faviconBase64DTO.getFavicon_ico_base64(), Constants.FAVICON_ICO_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
-        //faviconHandle(faviconBase64DTO.getFavicon_png_pwa_192_base64(), Constants.FAVICON_PNG_PWA_192_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
-        //faviconHandle(faviconBase64DTO.getFavicon_png_pwa_512_base64(), Constants.FAVICON_PNG_PWA_512_URI_PATH, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
+        faviconHandle(faviconBase64DTO.getFavicon_ico_base64(), "/favicon.ico", ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
     }
 
 
@@ -92,29 +90,6 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
             } catch (FileNotFoundException e) {
                 LOGGER.warning("save to Cache error " + e.getMessage());
             }
-        }
-    }
-
-    private void faviconHandle(String faviconIconBase64, String saveFilePath, Boolean saveToCache) {
-        if (StringUtils.isEmpty(faviconIconBase64)) {
-            copyResourceToCacheFolder(saveFilePath);
-            return;
-        }
-        try {
-            File file = PathUtil.getStaticFile(saveFilePath);
-            file.getParentFile().mkdirs();
-            byte[] binBytes;
-            if (faviconIconBase64.contains(",")) {
-                binBytes = Base64.getDecoder().decode(faviconIconBase64.split(",")[1]);
-            } else {
-                binBytes = Base64.getDecoder().decode(faviconIconBase64);
-            }
-            IOUtil.writeBytesToFile(binBytes, file);
-            if (Objects.equals(saveToCache, true)) {
-                saveToCacheFolder(new ByteArrayInputStream(binBytes), saveFilePath);
-            }
-        } catch (Exception e) {
-            LOGGER.warning("Save favicon error " + e.getMessage());
         }
     }
 
