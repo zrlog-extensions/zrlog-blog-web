@@ -1,6 +1,6 @@
 package com.zrlog.blog.web.template.vo;
 
-import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.common.cache.vo.BaseDataInitVO;
 import com.zrlog.data.dto.ArticleDetailDTO;
 
 public class ArticleDetailPageVO extends BasePageInfo {

@@ -12,9 +12,9 @@ import com.zrlog.blog.web.util.WebTools;
 import com.zrlog.business.plugin.StaticSitePlugin;
 import com.zrlog.business.util.ArticleHelpers;
 import com.zrlog.common.Constants;
+import com.zrlog.common.vo.Outline;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
-import com.zrlog.data.dto.OutlineVO;
 import com.zrlog.model.Log;
 import com.zrlog.util.I18nUtil;
 import com.zrlog.util.ParseUtil;
@@ -52,7 +52,7 @@ public class ArticleService {
         //没有使用md的toc目录的文章才尝试使用系统提取的目录
         if (log.getMarkdown() != null && !log.getMarkdown().toLowerCase().contains("[toc]") && !log.getMarkdown().toLowerCase().contains("[tocm]")) {
             //最基础的实现方式，若需要更强大的实现方式建议使用JavaScript完成（页面输入toc对象）
-            OutlineVO outlineVO = OutlineUtil.extractOutline(log.getContent());
+            List<Outline> outlineVO = OutlineUtil.extractOutline(log.getContent());
             if (!outlineVO.isEmpty()) {
                 log.setTocHtml(OutlineUtil.buildTocHtml(outlineVO, ""));
             }

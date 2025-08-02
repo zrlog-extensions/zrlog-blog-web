@@ -1,7 +1,6 @@
 package com.zrlog.blog.web.util;
 
-import com.zrlog.data.dto.Outline;
-import com.zrlog.data.dto.OutlineVO;
+import com.zrlog.common.vo.Outline;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,10 +14,10 @@ public class OutlineUtil {
     private OutlineUtil() {
     }
 
-    public static OutlineVO extractOutline(String htmlStr) {
+    public static List<Outline> extractOutline(String htmlStr) {
         Document document = Jsoup.parse(htmlStr);
         Elements elements = document.body().select("h1,h2,h3,h4,h5,h6");
-        OutlineVO outlines = new OutlineVO();
+        List<Outline> outlines = new ArrayList<>();
         for (Element element : elements) {
             Outline outline = new Outline();
             outline.setText(element.text().trim());
@@ -50,7 +49,7 @@ public class OutlineUtil {
         return outlines;
     }
 
-    public static String buildTocHtml(OutlineVO outlines, String baseStr) {
+    public static String buildTocHtml(List<Outline> outlines, String baseStr) {
         StringBuilder baseStrBuilder = new StringBuilder(baseStr);
         for (Outline outline : outlines) {
             if (!outline.getChildren().isEmpty()) {

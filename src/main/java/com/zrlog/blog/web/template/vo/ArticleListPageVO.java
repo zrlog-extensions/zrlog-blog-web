@@ -2,7 +2,7 @@ package com.zrlog.blog.web.template.vo;
 
 import com.hibegin.common.dao.dto.PageData;
 import com.zrlog.blog.web.util.PagerVO;
-import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.common.cache.vo.BaseDataInitVO;
 import com.zrlog.data.dto.ArticleBasicDTO;
 
 public class ArticleListPageVO extends BasePageInfo {

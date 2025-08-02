@@ -5,7 +5,7 @@ import com.hibegin.http.annotation.ResponseBody;
 import com.hibegin.http.server.web.Controller;
 import com.zrlog.common.Constants;
 import com.zrlog.blog.business.rest.response.ApiStandardResponse;
-import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.common.cache.vo.BaseDataInitVO;
 
 public class BlogApiCacheController extends Controller {
 

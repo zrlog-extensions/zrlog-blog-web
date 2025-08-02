@@ -1,9 +1,10 @@
 package com.zrlog.blog.web.template.vo;
 
+import com.zrlog.common.cache.vo.BaseDataInitVO;
 import com.zrlog.common.vo.PublicWebSiteInfo;
-import com.zrlog.data.cache.vo.BaseDataInitVO;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class BasePageInfo {
 
@@ -193,34 +194,37 @@ public class BasePageInfo {
     }
 
     public PublicWebSiteInfo getWebs() {
+        if (Objects.isNull(init)) {
+            return null;
+        }
         return init.getWebSite();
     }
 
     /**
-     * @deprecated see getWebs();
      * @return website
+     * @deprecated see getWebs();
      */
     @Deprecated
     public PublicWebSiteInfo getWebSite() {
-        return init.getWebSite();
+        return getWebs();
     }
 
     /**
-     * @deprecated see getWebs();
      * @return website
+     * @deprecated see getWebs();
      */
     @Deprecated
     public PublicWebSiteInfo getWebsite() {
-        return init.getWebSite();
+        return getWebs();
     }
 
     /**
-     * @deprecated see getWebs();
      * @return website
+     * @deprecated see getWebs();
      */
     @Deprecated
     public PublicWebSiteInfo getWEB_SITE() {
-        return init.getWebSite();
+        return getWebs();
     }
 
     public String getKey() {

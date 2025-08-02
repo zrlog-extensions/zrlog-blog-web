@@ -13,10 +13,13 @@ import com.zrlog.blog.web.util.PagerVO;
 import com.zrlog.blog.web.util.WebTools;
 import com.zrlog.business.plugin.StaticSitePlugin;
 import com.zrlog.common.Constants;
+import com.zrlog.common.cache.dto.LogNavDTO;
+import com.zrlog.common.cache.dto.TagDTO;
+import com.zrlog.common.cache.dto.TypeDTO;
 import com.zrlog.common.vo.I18nVO;
 import com.zrlog.common.vo.PublicWebSiteInfo;
-import com.zrlog.data.cache.vo.Archive;
-import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.common.cache.vo.Archive;
+import com.zrlog.common.cache.vo.BaseDataInitVO;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
 import com.zrlog.model.WebSite;
@@ -59,7 +62,7 @@ public class TemplateRenderUtils {
         String templatePath = TemplateHelper.getTemplatePath(request);
         I18nVO i18nInfo = I18nUtil.addToRequestWithTemplatePath(templatePath, request);
         ArticleDetailDTO log = (ArticleDetailDTO) request.getAttr().get("log");
-        BaseDataInitVO baseDataInitVO = BeanUtil.cloneObject((BaseDataInitVO) Constants.zrLogConfig.getCacheService().getInitData());
+        BaseDataInitVO baseDataInitVO = BeanUtil.convert(Constants.zrLogConfig.getCacheService().getInitData(), BaseDataInitVO.class);
         BasePageInfo basePageInfo = Objects.nonNull(log) ? new ArticleDetailPageVO(log, baseDataInitVO) : new ArticleListPageVO((PageData<ArticleBasicDTO>) request.getAttr().get("data"), baseDataInitVO);
         basePageInfo.setTemplate(templatePath);
         basePageInfo.setLang(i18nInfo.getLang());
@@ -194,20 +197,20 @@ public class TemplateRenderUtils {
     }
 
     private static void fullNavBar(HttpRequest request, String suffix, BaseDataInitVO baseDataInitVO) {
-        List<Map<String, Object>> logNavList = baseDataInitVO.getLogNavs();
-        for (Map<String, Object> logNav : logNavList) {
-            String url = logNav.get("url").toString();
+        List<LogNavDTO> logNavList = baseDataInitVO.getLogNavs();
+        for (LogNavDTO logNav : logNavList) {
+            String url = logNav.getUrl();
             boolean current;
             if ("/".equals(url) && isHomePage(request)) {
                 current = true;
             } else if (url.startsWith("/")) {
                 url = getNavUrl(request, suffix, url);
-                logNav.put("url", url);
+                logNav.setUrl(url);
                 current = ignoreScheme(request.getUrl(), suffix).equals(ignoreScheme(url, suffix));
             } else {
                 current = ignoreScheme(request.getUrl(), suffix).equals(ignoreScheme(url, suffix));
             }
-            logNav.put("current", current);
+            logNav.setCurrent(current);
         }
     }
 
@@ -224,19 +227,19 @@ public class TemplateRenderUtils {
         return archives;
     }
 
-    private static void fillTags(String suffix, HttpRequest request, List<Map<String, Object>> tags) {
-        for (Map<String, Object> tag : tags) {
-            tag.put("url", WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "tag/" + tag.get("text") + suffix));
+    private static void fillTags(String suffix, HttpRequest request, List<TagDTO> tags) {
+        for (TagDTO tag : tags) {
+            tag.setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "tag/" + tag.getText() + suffix));
         }
     }
 
-    private static void fillType(String suffix, List<Map<String, Object>> types, HttpRequest request, BasePageInfo pageInfo) {
-        for (Map<String, Object> type : types) {
-            String typeUri = "/" + Constants.getArticleUri() + "sort/" + type.get("alias");
+    private static void fillType(String suffix, List<TypeDTO> types, HttpRequest request, BasePageInfo pageInfo) {
+        for (TypeDTO type : types) {
+            String typeUri = "/" + Constants.getArticleUri() + "sort/" + type.getAlias();
             if (request.getUri().startsWith(typeUri)) {
-                tryEnableArrangePlugin((String) type.get("arrange_plugin"), pageInfo);
+                tryEnableArrangePlugin(type.getArrange_plugin(), pageInfo);
             }
-            type.put("url", WebTools.buildEncodedUrl(request, typeUri + suffix));
+            type.setUrl(WebTools.buildEncodedUrl(request, typeUri + suffix));
         }
     }
 

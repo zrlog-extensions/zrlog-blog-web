@@ -6,7 +6,7 @@ import com.hibegin.http.server.api.HttpResponse;
 import com.hibegin.http.server.web.Controller;
 import com.zrlog.blog.web.template.ZrLogTemplateRender;
 import com.zrlog.common.Constants;
-import com.zrlog.data.cache.vo.BaseDataInitVO;
+import com.zrlog.common.cache.vo.BaseDataInitVO;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
