@@ -62,11 +62,6 @@ class DevZrLogConfig extends ZrLogConfig {
     }
 
     @Override
-    public void refreshPluginCacheData(String version, HttpRequest request) {
-
-    }
-
-    @Override
     public List<IPlugin> getBasePluginList() {
         Plugins plugins1 = new Plugins();
         plugins1.add(new PluginCorePluginImpl(dbPropertiesFile));
