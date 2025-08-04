@@ -33,10 +33,6 @@ public class Application {
     public static void main(String[] args) {
         Constants.zrLogConfig = new DevZrLogConfig(7080, null, "");
         WebServerBuilder build = new WebServerBuilder.Builder().config(Constants.zrLogConfig).build();
-        build.addCreateSuccessHandle(() -> {
-            Constants.zrLogConfig.startPluginsAsync();
-            return null;
-        });
         build.start();
     }
 }
@@ -57,20 +53,10 @@ class DevZrLogConfig extends ZrLogConfig {
     }
 
     @Override
-    public void stop() {
-
-    }
-
-    @Override
-    public void refreshPluginCacheData(String version, HttpRequest request) {
-
-    }
-
-    @Override
     public List<IPlugin> getBasePluginList() {
-        Plugins plugins1 = new Plugins();
-        plugins1.add(new PluginCorePluginImpl(dbPropertiesFile));
-        plugins1.add(new CacheManagerPlugin(this));
-        return plugins1;
+        Plugins basePlugin = new Plugins();
+        basePlugin.add(new PluginCorePluginImpl(dbPropertiesFile));
+        basePlugin.add(new CacheManagerPlugin(this));
+        return basePlugin;
     }
 }

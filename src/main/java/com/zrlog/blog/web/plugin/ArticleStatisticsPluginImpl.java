@@ -30,11 +30,13 @@ public class ArticleStatisticsPluginImpl implements ArticleStatisticsPlugin {
     }
 
     @Override
-    public boolean start() {
+    public boolean autoStart() {
         //FaaS 模式下，不需要后台任务
-        if (EnvKit.isFaaSMode()) {
-            return true;
-        }
+        return !EnvKit.isFaaSMode();
+    }
+
+    @Override
+    public boolean start() {
         if (Objects.nonNull(clickSchedule)) {
             return true;
         }
