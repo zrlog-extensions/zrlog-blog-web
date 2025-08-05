@@ -32,7 +32,7 @@ public class BlogApiPublicController extends Controller {
         if (Objects.isNull(I18nUtil.threadLocal.get())) {
             return new HashMap<>();
         }
-        Map<String, Object> stringObjectMap = ObjectHelpers.requireNonNullElse(I18nUtil.getBlog().get(I18nUtil.getCurrentLocale()), new HashMap<>());
+        Map<String, Object> stringObjectMap = I18nUtil.getBlog();
         PublicInfoVO publicInfoVO = commonService.getPublicInfo(request);
         stringObjectMap.put("websiteTitle", publicInfoVO.getWebsiteTitle());
         stringObjectMap.put("homeUrl", publicInfoVO.getHomeUrl());
