@@ -2,12 +2,12 @@ package com.zrlog.blog;
 
 import com.hibegin.common.dao.DataSourceWrapper;
 import com.hibegin.http.server.WebServerBuilder;
-import com.hibegin.http.server.api.HttpRequest;
 import com.hibegin.http.server.util.PathUtil;
 import com.zrlog.blog.web.BlogWebSetup;
 import com.zrlog.business.plugin.CacheManagerPlugin;
 import com.zrlog.business.plugin.PluginCorePluginImpl;
 import com.zrlog.common.Constants;
+import com.zrlog.common.TokenService;
 import com.zrlog.common.Updater;
 import com.zrlog.common.ZrLogConfig;
 import com.zrlog.data.cache.CacheServiceImpl;
@@ -33,10 +33,6 @@ public class Application {
     public static void main(String[] args) {
         Constants.zrLogConfig = new DevZrLogConfig(7080, null, "");
         WebServerBuilder build = new WebServerBuilder.Builder().config(Constants.zrLogConfig).build();
-        build.addCreateSuccessHandle(() -> {
-            Constants.zrLogConfig.startPluginsAsync();
-            return null;
-        });
         build.start();
     }
 }
@@ -57,8 +53,8 @@ class DevZrLogConfig extends ZrLogConfig {
     }
 
     @Override
-    public void stop() {
-
+    protected TokenService initTokenService() {
+        return null;
     }
 
     @Override

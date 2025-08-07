@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>com.hibegin</groupId>
-    <version>3.2.72-SNAPSHOT</version>
+    <version>3.2.100-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zrlog-blog-web</artifactId>
     <name>ZrLog blog web</name>
@@ -44,11 +44,28 @@
         <url>https://github.com/zrlog-extensions/zrlog-blog-web</url>
     </issueManagement>
 
+    <repositories>
+        <repository>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>central-center</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.hibegin</groupId>
             <artifactId>zrlog-service</artifactId>
-            <version>3.2.72</version>
+            <version>3.2.100-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
