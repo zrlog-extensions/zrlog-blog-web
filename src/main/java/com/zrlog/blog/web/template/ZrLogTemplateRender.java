@@ -49,9 +49,8 @@ public class ZrLogTemplateRender implements TemplateRender {
     }
 
     private boolean existsByTemplateName(String templateName) {
-        String configTemplate = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getTemplate();
-        File path = PathUtil.getStaticFile(configTemplate);
-        if (path.exists() && !Objects.equals(configTemplate, Constants.DEFAULT_TEMPLATE_PATH)) {
+        File path = PathUtil.getStaticFile(pageInfo.getTemplate());
+        if (path.exists() && !Objects.equals(pageInfo.getTemplate(), Constants.DEFAULT_TEMPLATE_PATH)) {
             return Arrays.stream(Objects.requireNonNull(path.listFiles())).anyMatch(e -> e.getName().startsWith(templateName + "."));
         } else {
             return Objects.nonNull(ZrLogTemplateRender.class.getResourceAsStream(Constants.DEFAULT_TEMPLATE_PATH + "/" + templateName + ".ftl"));
