@@ -1,9 +1,11 @@
-name: Release to Maven Central
+name: Deploy to Maven Central
 
 on:
   push:
     tags:
       - 'v*'  # Only run on version tags like v1.2.3
+    branches:
+      - main # snapshot
 
 jobs:
   release:
