@@ -13,7 +13,6 @@ import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.common.vo.TemplateVO;
 import com.zrlog.data.dto.FaviconBase64DTO;
 import com.zrlog.model.WebSite;
-import com.zrlog.util.ThreadUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,8 +66,7 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
     }
 
 
-    private void handleRobotsTxt() {
-        PublicWebSiteInfo webSite = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
+    private void handleRobotsTxt(PublicWebSiteInfo webSite) {
         String robotTxt = webSite.getRobotRuleContent();
 
         if (StringUtils.isEmpty(robotTxt)) {
@@ -130,8 +128,7 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
     }
 
 
-    private void copyDefaultTemplateAssets() {
-        String templatePath = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getTemplate();
+    private void copyDefaultTemplateAssets(String templatePath) {
         if (!Objects.equals(templatePath, Constants.DEFAULT_TEMPLATE_PATH)) {
             return;
         }
@@ -158,10 +155,11 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
         if (StaticSitePlugin.isDisabled()) {
             return;
         }
+        PublicWebSiteInfo webSite = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
         refreshFavicon();
-        handleRobotsTxt();
+        handleRobotsTxt(webSite);
         copyCommonAssert();
-        copyDefaultTemplateAssets();
+        copyDefaultTemplateAssets(webSite.getTemplate());
         handleStatusPageMap.clear();
         //从首页开始查找
         handleStatusPageMap.put(contextPath + "/", HandleState.NEW);

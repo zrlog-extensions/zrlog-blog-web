@@ -24,7 +24,7 @@ import static com.zrlog.common.Constants.getZrLogHome;
 public class Application {
 
     static {
-        //System.setProperty("sws.run.mode", "dev");
+        System.setProperty("sws.run.mode", "dev");
         String home = getZrLogHome();
         if (Objects.nonNull(home)) {
             PathUtil.setRootPath(home);
@@ -63,9 +63,9 @@ class DevZrLogConfig extends ZrLogConfig {
 
     @Override
     public List<IPlugin> getBasePluginList() {
-        Plugins plugins1 = new Plugins();
-        plugins1.add(new PluginCorePluginImpl(dbPropertiesFile));
-        plugins1.add(new CacheManagerPlugin(this));
-        return plugins1;
+        Plugins basePlugin = new Plugins();
+        basePlugin.add(new PluginCorePluginImpl(dbPropertiesFile));
+        basePlugin.add(new CacheManagerPlugin(this));
+        return basePlugin;
     }
 }

@@ -1,6 +1,7 @@
 package com.zrlog.blog.web.plugin;
 
 import com.hibegin.common.BaseLockObject;
+import com.hibegin.common.util.EnvKit;
 import com.hibegin.common.util.LoggerUtil;
 import com.zrlog.business.util.TemplateDownloadUtils;
 import com.zrlog.common.Constants;
@@ -25,6 +26,11 @@ public class TemplateDownloadPlugin extends BaseLockObject implements IPlugin {
         started = true;
         precheckTemplate(Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getTemplate());
         return true;
+    }
+
+    @Override
+    public boolean autoStart() {
+        return !EnvKit.isFaaSMode();
     }
 
     @Override

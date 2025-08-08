@@ -13,6 +13,7 @@ import com.zrlog.business.plugin.StaticSitePlugin;
 import com.zrlog.business.util.ArticleHelpers;
 import com.zrlog.common.Constants;
 import com.zrlog.common.vo.Outline;
+import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
 import com.zrlog.model.Log;
@@ -89,7 +90,8 @@ public class ArticleService {
         log.setRubbish(ResultValueConvertUtils.toBoolean(log.getRubbish()));
         log.setPrivacy(ResultValueConvertUtils.toBoolean(log.getPrivacy()));
         log.setHot(ResultValueConvertUtils.toBoolean(log.getHot()));
-        log.setCanComment(ResultValueConvertUtils.toBoolean(log.getCanComment()) && Objects.equals(Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getDisable_comment_status(), false));
+        PublicWebSiteInfo publicWebSiteInfo = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
+        log.setCanComment(ResultValueConvertUtils.toBoolean(log.getCanComment()) && Objects.equals(publicWebSiteInfo.getDisable_comment_status(), false));
         log.setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + log.getAlias()));
         log.setTypeUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "sort/" + log.getTypeAlias() + suffix));
         log.setNoSchemeUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + UrlEncodeUtils.encodeUrl(log.getAlias()));
@@ -107,7 +109,7 @@ public class ArticleService {
         if (Objects.isNull(log.getContent())) {
             log.setContent("");
         }
-        if (Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getArticle_thumbnail_status() && StringUtils.isNotEmpty(log.getThumbnail())) {
+        if (publicWebSiteInfo.getArticle_thumbnail_status() && StringUtils.isNotEmpty(log.getThumbnail())) {
             log.setThumbnailAlt(ParseUtil.removeHtmlElement(log.getTitle()));
         } else {
             log.setThumbnail(null);
