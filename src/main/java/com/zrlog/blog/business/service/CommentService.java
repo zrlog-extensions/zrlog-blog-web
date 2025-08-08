@@ -27,11 +27,10 @@ public class CommentService {
         return m.matches();
     }
 
-    private boolean isAllowComment(ArticleBasicDTO articleBasicDTO) throws SQLException {
+    private boolean isAllowComment(ArticleBasicDTO articleBasicDTO) {
         if (Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getDisable_comment_status()) {
             return false;
         }
-
         return Objects.equals(articleBasicDTO.getCanComment(), true);
     }
 
@@ -55,6 +54,9 @@ public class CommentService {
             return new CreateCommentResponse(createCommentRequest.getLogId());
         }
         ArticleBasicDTO log = ResultBeanUtils.convert(dbLog, ArticleBasicDTO.class);
+        if (!isAllowComment(log)) {
+            return new CreateCommentResponse(log.getAlias());
+        }
         nickname = Jsoup.clean(createCommentRequest.getUserName(), Safelist.basic());
         String userHome = createCommentRequest.getUserHome();
         if (StringUtils.isNotEmpty(userHome)) {
