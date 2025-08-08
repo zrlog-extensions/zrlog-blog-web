@@ -16,10 +16,10 @@ import com.zrlog.common.Constants;
 import com.zrlog.common.cache.dto.LogNavDTO;
 import com.zrlog.common.cache.dto.TagDTO;
 import com.zrlog.common.cache.dto.TypeDTO;
-import com.zrlog.common.vo.I18nVO;
-import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.common.cache.vo.Archive;
 import com.zrlog.common.cache.vo.BaseDataInitVO;
+import com.zrlog.common.vo.I18nVO;
+import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
 import com.zrlog.model.WebSite;
@@ -166,6 +166,7 @@ public class TemplateRenderUtils {
             if (Objects.nonNull(pager)) {
                 ((ArticleListPageVO) pageInfo).setPager(pager);
             }
+            ((ArticleListPageVO) pageInfo).setYurl((String) request.getAttr().get("yurl"));
         } else if (pageInfo instanceof ArticleDetailPageVO) {
             ArticleDetailDTO objectMap = ((ArticleDetailPageVO) pageInfo).getLog();
             tryEnableArrangePlugin(objectMap.getArrange_plugin(), pageInfo);

@@ -11,6 +11,7 @@ public class ArticleListPageVO extends BasePageInfo {
     private PagerVO pager;
     private String tipsType;
     private String tipsName;
+    private String yurl;
 
     public ArticleListPageVO() {
     }
@@ -50,5 +51,13 @@ public class ArticleListPageVO extends BasePageInfo {
 
     public void setTipsName(String tipsName) {
         this.tipsName = tipsName;
+    }
+
+    public String getYurl() {
+        return yurl;
+    }
+
+    public void setYurl(String yurl) {
+        this.yurl = yurl;
     }
 }

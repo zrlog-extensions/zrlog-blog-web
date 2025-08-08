@@ -8,6 +8,8 @@ import com.hibegin.common.util.StringUtils;
 import com.hibegin.http.HttpMethod;
 import com.hibegin.http.annotation.RequestMethod;
 import com.hibegin.http.annotation.ResponseBody;
+import com.hibegin.http.server.api.HttpRequest;
+import com.hibegin.http.server.api.HttpResponse;
 import com.hibegin.http.server.web.Controller;
 import com.zrlog.blog.business.rest.request.CreateCommentRequest;
 import com.zrlog.blog.business.rest.response.CreateCommentResponse;
@@ -17,11 +19,12 @@ import com.zrlog.blog.web.util.PagerUtil;
 import com.zrlog.blog.web.util.PagerVO;
 import com.zrlog.blog.web.util.WebTools;
 import com.zrlog.business.plugin.StaticSitePlugin;
+import com.zrlog.common.CacheService;
 import com.zrlog.common.Constants;
+import com.zrlog.common.cache.dto.TypeDTO;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
 import com.zrlog.model.Log;
-import com.zrlog.model.Type;
 import com.zrlog.util.I18nUtil;
 import com.zrlog.util.ParseUtil;
 import com.zrlog.util.ZrLogUtil;
@@ -38,6 +41,16 @@ public class ArticleController extends Controller {
     private static final Logger LOGGER = LoggerUtil.getLogger(ArticleController.class);
     private final CommentService commentService = new CommentService();
     private final ArticleService articleService = new ArticleService();
+    private final CacheService cacheService;
+
+    public ArticleController(HttpRequest request, HttpResponse response) {
+        super(request, response);
+        this.cacheService = Constants.zrLogConfig.getCacheService();
+    }
+
+    public ArticleController() {
+        this.cacheService = Constants.zrLogConfig.getCacheService();
+    }
 
     /**
      * add page info for template more easy
@@ -66,7 +79,7 @@ public class ArticleController extends Controller {
 
     @RequestMethod
     public String index() {
-        PageRequest pageRequest = new PageRequestImpl(parseUriInfo(request.getUri()).getPage(), Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getRows());
+        PageRequest pageRequest = new PageRequestImpl(parseUriInfo(request.getUri()).getPage(), cacheService.getPublicWebSiteInfo().getRows());
         PageData<ArticleBasicDTO> data = new Log().visitorFind(pageRequest, null);
         setPageDataInfo("all-", data, pageRequest);
         return "index";
@@ -89,7 +102,7 @@ public class ArticleController extends Controller {
         if (StringUtils.isEmpty(key)) {
             return index();
         }
-        Long rows = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getRows();
+        Long rows = cacheService.getPublicWebSiteInfo().getRows();
         data = new Log().visitorFind(new PageRequestImpl(1L, rows), key);
         // 记录回话的Key
         request.getAttr().put("key", WebTools.htmlEncode(key));
@@ -106,7 +119,7 @@ public class ArticleController extends Controller {
         request.getAttr().put("tipsType", I18nUtil.getBlogStringFromRes("archive"));
         request.getAttr().put("tipsName", uriInfoVO.getKey());
 
-        Long rows = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getRows();
+        Long rows = cacheService.getPublicWebSiteInfo().getRows();
         setPageDataInfo("record/" + uriInfoVO.getKey() + "-", new Log().findByDate(uriInfoVO.getPage(), rows, uriInfoVO.getKey()), new PageRequestImpl(uriInfoVO.getPage(), rows));
         return "page";
     }
@@ -118,7 +131,7 @@ public class ArticleController extends Controller {
         if (Constants.isStaticHtmlStatus()) {
             ext = ".html";
             if (!Constants.zrLogConfig.getServerConfig().isNativeImageAgent()) {
-                Constants.zrLogConfig.getCacheService().refreshInitData();
+                cacheService.refreshInitData();
             }
         }
         response.redirect("/" + Constants.getArticleUri() + x.getAlias() + ext);
@@ -176,13 +189,14 @@ public class ArticleController extends Controller {
     @RequestMethod
     public String sort() throws SQLException {
         ArticleUriInfoVO uriInfoVO = parseUriInfo(request.getUri());
-        Long rows = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getRows();
+        Long rows = cacheService.getPublicWebSiteInfo().getRows();
         setPageDataInfo("sort/" + uriInfoVO.getKey() + "-", new Log().findByTypeAlias(uriInfoVO.getPage(), rows, uriInfoVO.getKey()), new PageRequestImpl(uriInfoVO.getPage(), rows));
-
-        Map<String, Object> type = new Type().findByAlias(uriInfoVO.getKey());
         request.getAttr().put("tipsType", I18nUtil.getBlogStringFromRes("category"));
-        if (type != null) {
-            request.getAttr().put("tipsName", type.get("typeName"));
+        Optional<TypeDTO> first = cacheService.getArticleTypes().stream().filter(e -> Objects.equals(e.getAlias(), uriInfoVO.getKey())).findFirst();
+        if (first.isPresent()) {
+            request.getAttr().put("tipsName", first.get().getTypeName());
+        } else {
+            request.getAttr().put("tipsName", "");
         }
         return "page";
     }
@@ -191,7 +205,7 @@ public class ArticleController extends Controller {
     public String tag() throws SQLException {
         ArticleUriInfoVO uriInfoVO = parseUriInfo(request.getUri());
         String tag = uriInfoVO.getKey();
-        Long rows = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo().getRows();
+        Long rows = cacheService.getPublicWebSiteInfo().getRows();
         setPageDataInfo("tag/" + tag + "-", new Log().findByTag(uriInfoVO.getPage(), rows, tag), new PageRequestImpl(uriInfoVO.getPage(), rows));
         getRequest().getAttr().put("tipsType", I18nUtil.getBlogStringFromRes("tag"));
         getRequest().getAttr().put("tipsName", tag);
