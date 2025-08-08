@@ -14,6 +14,7 @@ import com.zrlog.data.cache.CacheServiceImpl;
 import com.zrlog.plugin.IPlugin;
 import com.zrlog.plugin.Plugins;
 import com.zrlog.web.WebSetup;
+import com.zrlog.web.inteceptor.DefaultInterceptor;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,12 +44,15 @@ class DevZrLogConfig extends ZrLogConfig {
         super(port, updater, contextPath);
         webSetups.add(new BlogWebSetup(this, contextPath));
         webSetups.forEach(WebSetup::setup);
+        this.serverConfig.addInterceptor(DefaultInterceptor.class);
     }
 
     @Override
     public DataSourceWrapper configDatabase() throws Exception {
         this.dataSource = super.configDatabase();
-        cacheService = new CacheServiceImpl();
+        if (Objects.nonNull(this.dataSource)) {
+            cacheService = new CacheServiceImpl();
+        }
         return dataSource;
     }
 
