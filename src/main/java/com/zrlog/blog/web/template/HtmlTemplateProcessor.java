@@ -11,17 +11,22 @@ import com.zrlog.common.Constants;
 import com.zrlog.common.vo.AdminTokenVO;
 import com.zrlog.plugin.BaseStaticSitePlugin;
 import com.zrlog.util.StaticFileCacheUtils;
+import com.zrlog.util.ThreadUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
@@ -51,14 +56,36 @@ class HtmlTemplateProcessor {
         this.staticResourceBaseUrl = staticResourceBaseUrl;
     }
 
+    private void handlePluginTag(Document document, Map<String, String> replaceMap) {
+        Elements plugins = document.select("plugin[name]");
+        if (plugins.isEmpty()) {
+            return;
+        }
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+        for (Element tag : plugins) {
+            ExecutorService executorService = ThreadUtils.newFixedThreadPool(Math.min(4, plugins.size()));
+            try {
+                CompletableFuture<Void> voidCompletableFuture = parseCustomHtmlTag(tag, replaceMap, executorService);
+                if (Objects.nonNull(voidCompletableFuture)) {
+                    futures.add(voidCompletableFuture);
+                }
+            } finally {
+                executorService.shutdown();
+            }
+        }
+        if (!futures.isEmpty()) {
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        }
+    }
+
     public String transform(String htmlStr) throws Exception {
         Document document = Jsoup.parse(htmlStr, "", Parser.xmlParser());
-        Map<String, String> replaceMap = new HashMap<>();
+        Map<String, String> replaceMap = new ConcurrentHashMap<>();
         for (Element tag : document.getAllElements()) {
             String tagName = tag.tagName();
             addStaticResourceFlag(tag, tagName);
-            parseCustomHtmlTag(tag, tagName, replaceMap);
         }
+        handlePluginTag(document, replaceMap);
         String html = document.html();
         for (Map.Entry<String, String> entry : replaceMap.entrySet()) {
             html = html.replace(entry.getKey(), entry.getValue());
@@ -70,22 +97,35 @@ class HtmlTemplateProcessor {
         return html + "<!--" + (System.currentTimeMillis() - startTime) + "ms(" + versionInfo + ")-->";
     }
 
-    private void parseCustomHtmlTag(Element element, String tagName, Map<String, String> replaceMap) throws IOException, URISyntaxException, InterruptedException {
-        if ("plugin".equals(tagName) && !element.attr("name").isEmpty()) {
+    private CompletableFuture<Void> parseCustomHtmlTag(Element element, Map<String, String> replaceMap, ExecutorService executorService) {
+        String name = element.attr("name");
+        if (name.isEmpty()) {
+            return null;
+        }
+        element.attr("data-plugin-id", pluginId.incrementAndGet() + "");
+        return CompletableFuture.runAsync(() -> {
             String url = "/" + element.attr("name") + "/" + element.attr("view").replaceFirst("/", "");
             if (!element.attr("param").isEmpty()) {
                 url += "?" + element.attr("param");
             }
-            element.attr("data-plugin-id", pluginId.incrementAndGet() + "");
-            CloseResponseHandle handle = Constants.zrLogConfig.getPlugin(PluginCorePlugin.class).getContext(url, HttpMethod.GET, request, adminTokenVO);
-            try (InputStream in = handle.getT().body()) {
-                byte[] bytes = IOUtil.getByteByInputStream(in);
-                if (handle.getStatusCode() != 200) {
-                    throw new IOException("Template plugin page render status error " + handle.getStatusCode() + ", response body " + new String(bytes));
+
+            try {
+                CloseResponseHandle handle = Constants.zrLogConfig.getPlugin(PluginCorePlugin.class).getContext(url, HttpMethod.GET, request, adminTokenVO);
+                try (InputStream in = handle.getT().body()) {
+                    byte[] bytes = IOUtil.getByteByInputStream(in);
+                    if (handle.getStatusCode() != 200) {
+                        throw new RuntimeException("Template plugin page render status error " + handle.getStatusCode() + ", response body " + new String(bytes));
+                    }
+                    replaceMap.put(element.outerHtml(), new String(bytes, StandardCharsets.UTF_8));
                 }
-                replaceMap.put(element.outerHtml(), new String(bytes, StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
+                throw new RuntimeException("Template plugin page render error " + e.getMessage(), e);
             }
-        }
+        }, executorService);
+
     }
 
     private void addStaticResourceFlag(Element tag, String tagName) {
