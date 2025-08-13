@@ -8,6 +8,7 @@ import com.hibegin.template.TemplateRender;
 import com.zrlog.blog.web.plugin.TemplateDownloadPlugin;
 import com.zrlog.blog.web.template.vo.BasePageInfo;
 import com.zrlog.business.plugin.BodySaveResponse;
+import com.zrlog.business.template.HtmlTemplateProcessor;
 import com.zrlog.common.Constants;
 import com.zrlog.common.TokenService;
 import com.zrlog.common.exception.NotImplementException;
@@ -92,7 +93,7 @@ public class ZrLogTemplateRender implements TemplateRender {
         if (Objects.nonNull(tokenService)) {
             adminTokenVO = tokenService.getAdminTokenVO(request);
         }
-        HtmlTemplateProcessor pluginTagHande = new HtmlTemplateProcessor("/",
+        HtmlTemplateProcessor pluginTagHande = new HtmlTemplateProcessor(
                 request, adminTokenVO, Objects.requireNonNullElse(pageInfo.getStaticResourceBaseUrl(), "/"));
         String realHtmlStr = pluginTagHande.transform(htmlStr);
         if (!catGeneratorHtml(request)) {
