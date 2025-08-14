@@ -7,6 +7,7 @@ import com.hibegin.http.server.ApplicationContext;
 import com.hibegin.http.server.config.AbstractServerConfig;
 import com.hibegin.http.server.util.PathUtil;
 import com.zrlog.business.plugin.StaticSitePlugin;
+import com.zrlog.business.plugin.type.StaticSiteType;
 import com.zrlog.business.service.TemplateInfoHelper;
 import com.zrlog.common.Constants;
 import com.zrlog.common.vo.PublicWebSiteInfo;
@@ -202,5 +203,10 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
     @Override
     public List<File> getCacheFiles() {
         return cacheFiles;
+    }
+
+    @Override
+    public StaticSiteType getType() {
+        return StaticSiteType.BLOG;
     }
 }
