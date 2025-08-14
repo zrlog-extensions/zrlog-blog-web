@@ -6,9 +6,13 @@ import com.hibegin.common.util.EnvKit;
 import com.hibegin.common.util.LoggerUtil;
 import com.hibegin.common.util.StringUtils;
 import com.zrlog.business.plugin.RequestInfo;
+import com.zrlog.common.Constants;
+import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.model.Log;
 import eu.bitwalker.useragentutils.BrowserType;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -68,7 +72,20 @@ public class ArticleStatisticsRunnable extends BaseLockObject implements Runnabl
         }
     }
 
+    private boolean isDisabled() {
+        PublicWebSiteInfo publicWebSiteInfo = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
+        String webCmStr = publicWebSiteInfo.getWebCm();
+        if (StringUtils.isEmpty(webCmStr)) {
+            return false;
+        }
+        Elements select = Jsoup.parse(webCmStr).body().select("plugin[name=statistics]");
+        return select.isEmpty();
+    }
+
     public void addTask(RequestInfo requestInfo) {
+        if (isDisabled()) {
+            return;
+        }
         requestInfoList.add(requestInfo);
         if (EnvKit.isFaaSMode()) {
             this.run();
