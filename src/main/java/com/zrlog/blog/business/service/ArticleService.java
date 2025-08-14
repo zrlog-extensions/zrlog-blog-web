@@ -93,6 +93,7 @@ public class ArticleService {
         log.setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + log.getAlias()));
         log.setTypeUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "sort/" + log.getTypeAlias() + suffix));
         log.setNoSchemeUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + UrlEncodeUtils.encodeUrl(log.getAlias()));
+        log.setCommentUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + "addComment");
         //
         log.setRecommended(ResultValueConvertUtils.toBoolean(log.getRecommended()));
         log.setReleaseTime(ResultValueConvertUtils.formatDate(log.getReleaseTime(), "yyyy-MM-dd"));

@@ -13,7 +13,7 @@
                     </li>
                 </ul>
             </#list>
-            <form action="/addComment" method="post">
+            <form action="${log.commentUrl}" method="post">
                 <input type="hidden" name="logId" value="${log.logId}">
                 <h2>${_res.comment}</h2>
                 <textarea required class="form-control" rows="15" cols="45" name="userComment"></textarea>
