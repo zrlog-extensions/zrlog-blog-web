@@ -201,6 +201,7 @@ aside .search input[type=text] {
     padding: 6px;
     flex: 1;
     background: inherit;
+    width: 100%;
 }
 
 aside .search {
@@ -460,9 +461,6 @@ aside li a:hover {
         width: 100%;
     }
 
-    aside .search input[type=text] {
-        width: 100%;
-    }
 
     .albums .container {
         width: 640px;
