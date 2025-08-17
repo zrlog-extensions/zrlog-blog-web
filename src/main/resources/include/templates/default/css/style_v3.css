@@ -95,6 +95,8 @@ aside {
     display: flex;
     flex-flow: wrap;
     gap: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .taglist a {
