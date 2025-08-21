@@ -69,7 +69,7 @@ public class TemplateRenderUtils {
         basePageInfo.setLocal(i18nInfo.getLocale());
         Map<String, Object> res = i18nInfo.getBlog().get(i18nInfo.getLocale());
         if (Objects.nonNull(res)) {
-            res.putAll(new WebSite().getTemplateConfigMapWithCache(templatePath));
+            res.putAll(Constants.zrLogConfig.getCacheService().getTemplateConfigMapWithCache(templatePath));
             basePageInfo.set_res(res);
         }
         fillInfo(request, basePageInfo);

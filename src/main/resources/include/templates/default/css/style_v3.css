@@ -91,6 +91,14 @@ aside {
 }
 
 /* Tag Styles */
+.taglist {
+    display: flex;
+    flex-flow: wrap;
+    gap: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
 .taglist a {
     padding: 0;
     display: inline-block;
@@ -99,7 +107,6 @@ aside {
 
 a.size1 {
     font-size: 14px;
-    padding: 2px;
     color: #804D40;
 }
 
@@ -108,7 +115,6 @@ a.size1:hover {
 }
 
 a.size2 {
-    padding: 2px;
     font-size: 14px;
     color: #B9251A;
 }
@@ -118,7 +124,6 @@ a.size2:hover {
 }
 
 a.size3 {
-    padding: 3px;
     font-size: 16px;
     color: #C4876A;
 }
@@ -128,7 +133,6 @@ a.size3:hover {
 }
 
 a.size4 {
-    padding: 1px;
     font-size: 18px;
     color: #B46A47;
 }
@@ -138,7 +142,6 @@ a.size4:hover {
 }
 
 a.size5 {
-    padding: 3px;
     font-size: 20px;
     color: #E13728;
 }
@@ -148,7 +151,6 @@ a.size5:hover {
 }
 
 a.size6 {
-    padding: 2px;
     font-size: 22px;
     color: #77625E;
 }
@@ -201,6 +203,7 @@ aside .search input[type=text] {
     padding: 6px;
     flex: 1;
     background: inherit;
+    width: 100%;
 }
 
 aside .search {
@@ -460,9 +463,6 @@ aside li a:hover {
         width: 100%;
     }
 
-    aside .search input[type=text] {
-        width: 100%;
-    }
 
     .albums .container {
         width: 640px;

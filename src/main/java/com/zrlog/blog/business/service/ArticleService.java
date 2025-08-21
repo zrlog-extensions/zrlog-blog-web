@@ -50,9 +50,7 @@ public class ArticleService {
         log.getNextLog().setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + log.getNextLog().getAlias() + suffix));
         log.getLastLog().setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + log.getLastLog().getAlias() + suffix));
         log.setTags(getTags(log, request));
-        //没有使用md的toc目录的文章才尝试使用系统提取的目录
-        if (log.getMarkdown() != null && !log.getMarkdown().toLowerCase().contains("[toc]") && !log.getMarkdown().toLowerCase().contains("[tocm]")) {
-            //最基础的实现方式，若需要更强大的实现方式建议使用JavaScript完成（页面输入toc对象）
+        if (StringUtils.isNotEmpty(log.getMarkdown())) {
             List<Outline> outlineVO = OutlineUtil.extractOutline(log.getContent());
             if (!outlineVO.isEmpty()) {
                 log.setTocHtml(OutlineUtil.buildTocHtml(outlineVO, ""));
@@ -95,6 +93,7 @@ public class ArticleService {
         log.setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + log.getAlias()));
         log.setTypeUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "sort/" + log.getTypeAlias() + suffix));
         log.setNoSchemeUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + UrlEncodeUtils.encodeUrl(log.getAlias()));
+        log.setCommentUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + "addComment");
         //
         log.setRecommended(ResultValueConvertUtils.toBoolean(log.getRecommended()));
         log.setReleaseTime(ResultValueConvertUtils.formatDate(log.getReleaseTime(), "yyyy-MM-dd"));
