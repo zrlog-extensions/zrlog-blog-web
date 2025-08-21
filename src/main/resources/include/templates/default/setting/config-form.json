@@ -21,6 +21,7 @@
     "label": "全局样式",
     "htmlElementType": "large-textarea",
     "placeholder": "<style>body {color: blue}</style>",
+    "contentType": "css",
     "type": "text"
   },
   "footerLink": {
