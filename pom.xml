@@ -65,7 +65,7 @@
         <dependency>
             <groupId>com.hibegin</groupId>
             <artifactId>zrlog-service</artifactId>
-            <version>3.2.110-SNAPSHOT</version>
+            <version>3.2.111</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
