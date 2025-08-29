@@ -573,3 +573,10 @@ li.page-item {
         color: #ffffff; /* 白色字体 */
     }
 }
+
+article .title {
+    margin-bottom: 8px;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: .5px solid #eee;
+}

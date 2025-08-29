@@ -1,5 +1,5 @@
 <article>
-    <h2 style="margin-bottom: 8px">${log.title}</h2>
+    <h2 class="title">${log.title}</h2>
     <div class="meta" style="padding-bottom: .5rem;border-top: none;padding-top: 0">
         <div style="display:flex;justify-content: flex-start;gap: .4rem">
             <span class="category">

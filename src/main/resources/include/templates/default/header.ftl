@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="${url}/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="${url}/css/style_v3.css"/>
     <link rel="stylesheet" href="${baseUrl}assets/css/markdown.css"/>
-    <link rel="stylesheet" href="${baseUrl}assets/css/prettyprint.css"/>
+    <link rel="stylesheet" href="${baseUrl}assets/css/pretty-print.css"/>
     <link rel="stylesheet" href="${baseUrl}assets/css/katex.min.css"/>
 
     <#include "_common/auto-hljs.ftl"/>

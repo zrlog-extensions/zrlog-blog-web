@@ -15,9 +15,8 @@ import com.zrlog.common.vo.TemplateVO;
 import com.zrlog.data.dto.FaviconBase64DTO;
 import com.zrlog.model.WebSite;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -102,30 +101,35 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
         return defaultLang;
     }
 
-    private void copyCommonAssert() {
-        //video.js
-        copyResourceToCacheFolder("/assets/css/font/vjs.eot");
-        copyResourceToCacheFolder("/assets/css/font/vjs.svg");
-        copyResourceToCacheFolder("/assets/css/font/vjs.ttf");
-        copyResourceToCacheFolder("/assets/css/font/vjs.woff");
-        copyResourceToCacheFolder("/assets/css/video-js.css");
-        copyResourceToCacheFolder("/assets/css/katex.min.css");
-        copyResourceToCacheFolder("/assets/js/video.js");
-        copyResourceToCacheFolder("/assets/css/hljs/dark.css");
-        copyResourceToCacheFolder("/assets/css/hljs/light.css");
-        //default avatar url
-        //copyResourceToCacheFolder("/assets/images/default-portrait.gif");
-        File faviconFile = PathUtil.getStaticFile("/favicon.ico");
+    private void copyAssetsFiles() {
+        try (InputStream inputStream = BlogPageStaticSitePlugin.class.getResourceAsStream("/resource.txt")) {
+            if (Objects.isNull(inputStream)) {
+                return;
+            }
+            List<String> assets = Arrays.asList(new String(inputStream.readAllBytes()).split("\n"));
+            assets.forEach(e -> {
+                if (e.startsWith("assets/")) {
+                    copyResourceToCacheFolder("/" + e);
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.warning("Handle resource.txt error " + e.getMessage());
+        }
+    }
+
+    private void copyFaviconFile() {
+        String favicon = "/favicon.ico";
+        File faviconFile = PathUtil.getStaticFile(favicon);
         if (faviconFile.exists()) {
             try {
                 saveToCacheFolder(new FileInputStream(faviconFile), "/" + faviconFile.getName());
             } catch (FileNotFoundException e) {
-                LOGGER.warning("Missing resource " + faviconFile);
+                LOGGER.warning("Handle " + favicon + " resource " + faviconFile);
             }
-        } else {
-            //favicon
-            copyResourceToCacheFolder("/favicon.ico");
+            return;
         }
+        //favicon
+        copyResourceToCacheFolder(favicon);
     }
 
 
@@ -159,7 +163,8 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
         PublicWebSiteInfo webSite = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
         refreshFavicon();
         handleRobotsTxt(webSite);
-        copyCommonAssert();
+        copyAssetsFiles();
+        copyFaviconFile();
         copyDefaultTemplateAssets(webSite.getTemplate());
         handleStatusPageMap.clear();
         //从首页开始查找

@@ -9,12 +9,12 @@
     </#if>
     <#if data?has_content && data.rows?has_content>
         <#list data.rows as log>
-            <article class="markdown-body">
+            <article>
                 <#if log.thumbnail?has_content>
                     <img class="preview-img" onerror="this.style.display='none'" alt="${log.title}" src="${log.thumbnail}"/>
                 </#if>
-                <h2 style="margin-bottom: 8px;margin-top: 0"><a rel="bookmark" href="${log.url}">${log.title}</a></h2>
-                <div class="content" style="padding-bottom: 12px">${log.digest!''}</div>
+                <h2 class="title"><a rel="bookmark" href="${log.url}">${log.title}</a></h2>
+                <div class="markdown-body" style="padding-bottom: 12px">${log.digest!''}</div>
                 <div class="meta">
                     <div style="display:flex;justify-content: flex-start;gap: .4rem">
                         <span class="category">

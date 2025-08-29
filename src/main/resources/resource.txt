@@ -26,7 +26,7 @@ resource.txt
 i18n/blog_zh_CN.properties
 i18n/blog_en_US.properties
 assets/css/video-js.css
-assets/css/prettyprint.css
+assets/css/pretty-print.css
 assets/css/markdown.css
 assets/css/katex.min.css
 assets/css/hljs/dark.css
