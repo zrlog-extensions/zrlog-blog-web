@@ -576,6 +576,7 @@ li.page-item {
 
 article .title {
     margin-bottom: 8px;
+    padding-bottom: 8px;
     font-size: 1.75em;
     line-height: 1.225;
     border-bottom: .5px solid #eee;
