@@ -563,3 +563,13 @@ li.page-item {
     padding: 0!important;
     border-radius: 4px!important;
 }
+
+@media (prefers-color-scheme: light) {
+    .navbar-custom .navbar-brand {
+        color: #ffffff; /* 白色字体 */
+    }
+
+    .navbar-custom .nav-link {
+        color: #ffffff; /* 白色字体 */
+    }
+}

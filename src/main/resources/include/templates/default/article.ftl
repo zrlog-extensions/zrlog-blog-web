@@ -1,4 +1,4 @@
-<article class="markdown-body">
+<article>
     <h2 style="margin-bottom: 8px">${log.title}</h2>
     <div class="meta" style="padding-bottom: .5rem;border-top: none;padding-top: 0">
         <div style="display:flex;justify-content: flex-start;gap: .4rem">
@@ -11,16 +11,16 @@
             </span>
         </div>
     </div>
-    <div class="content">
+    <div class="markdown-body">
         ${log.content!''}
     </div>
     <hr style="padding-top: 16px;"/>
     <#if log.tags?has_content>
-    <div style="display: flex;gap: 8px;height: 60px;align-items: center">
-        <#list log.tags as tag>
-            <a href="${tag.url}"><span class="badge text-bg-primary" style="font-size: 14px">#${tag.name}</span></a>
-        </#list>
-    </div>
+        <div style="display: flex;gap: 8px;height: 60px;align-items: center">
+            <#list log.tags as tag>
+                <a href="${tag.url}"><span class="badge text-bg-primary" style="font-size: 14px">#${tag.name}</span></a>
+            </#list>
+        </div>
     </#if>
     <p>
         ${_res.reprint!''}

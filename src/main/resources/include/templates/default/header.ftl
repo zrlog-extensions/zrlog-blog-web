@@ -8,8 +8,10 @@
     <meta name="keywords" content="${keywords!''}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <link rel="stylesheet" type="text/css" href="${url}/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="${url}/css/editormd.css"/>
     <link rel="stylesheet" type="text/css" href="${url}/css/style_v3.css"/>
+    <link rel="stylesheet" href="${baseUrl}assets/css/markdown.css"/>
+    <link rel="stylesheet" href="${baseUrl}assets/css/prettyprint.css"/>
+    <link rel="stylesheet" href="${baseUrl}assets/css/katex.min.css"/>
 
     <#include "_common/auto-hljs.ftl"/>
 
@@ -19,14 +21,6 @@
         @media (prefers-color-scheme: light) {
             .navbar-custom {
                 background: ${_res.navBg!'#0d6efd'};
-            }
-
-            .navbar-custom .navbar-brand {
-                color: #ffffff; /* 白色字体 */
-            }
-
-            .navbar-custom .nav-link {
-                color: #ffffff; /* 白色字体 */
             }
         }
     </style>

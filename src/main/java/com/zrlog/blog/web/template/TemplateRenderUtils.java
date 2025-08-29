@@ -22,7 +22,6 @@ import com.zrlog.common.vo.I18nVO;
 import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
-import com.zrlog.model.WebSite;
 import com.zrlog.plugin.BaseStaticSitePlugin;
 import com.zrlog.util.I18nUtil;
 import com.zrlog.util.TemplateHelper;
@@ -137,6 +136,9 @@ public class TemplateRenderUtils {
     }
 
     private static boolean isCdnResourceAble(PublicWebSiteInfo webSite, String templatePath) {
+        if (Objects.equals("0", System.getenv().get("CDN"))) {
+            return false;
+        }
         Properties properties = new Properties();
         File file = PathUtil.getStaticFile(templatePath + "/template.properties");
         if (!file.exists()) {
