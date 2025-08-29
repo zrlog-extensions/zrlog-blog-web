@@ -11,3 +11,4 @@ static
 cache
 conf/plugins
 static/
+.DS_Store
