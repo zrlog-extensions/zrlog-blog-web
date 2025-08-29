@@ -36,6 +36,7 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
     private final ReentrantLock parseLock = new ReentrantLock();
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
     private final List<File> cacheFiles = new CopyOnWriteArrayList<>();
+    private final String favicon = "/favicon.ico";
 
     public BlogPageStaticSitePlugin(AbstractServerConfig abstractServerConfig, String contextPath) {
         this.applicationContext = new ApplicationContext(abstractServerConfig.getServerConfig());
@@ -62,7 +63,7 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
 
     private void refreshFavicon() {
         FaviconBase64DTO faviconBase64DTO = new WebSite().faviconBase64DTO();
-        faviconHandle(faviconBase64DTO.getFavicon_ico_base64(), "/favicon.ico", ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
+        faviconHandle(faviconBase64DTO.getFavicon_ico_base64(), favicon, ResultValueConvertUtils.toBoolean(faviconBase64DTO.getGenerator_html_status()));
     }
 
 
@@ -118,7 +119,6 @@ public class BlogPageStaticSitePlugin extends BaseLockObject implements StaticSi
     }
 
     private void copyFaviconFile() {
-        String favicon = "/favicon.ico";
         File faviconFile = PathUtil.getStaticFile(favicon);
         if (faviconFile.exists()) {
             try {
