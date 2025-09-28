@@ -16,6 +16,7 @@ import com.zrlog.common.vo.Outline;
 import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
+import com.zrlog.data.dto.VisitorCommentDTO;
 import com.zrlog.model.Log;
 import com.zrlog.util.I18nUtil;
 import com.zrlog.util.ParseUtil;

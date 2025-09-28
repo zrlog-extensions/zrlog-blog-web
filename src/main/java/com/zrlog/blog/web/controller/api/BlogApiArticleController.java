@@ -9,8 +9,11 @@ import com.zrlog.blog.business.service.ArticleService;
 import com.zrlog.business.util.ControllerUtil;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
+import com.zrlog.data.dto.VisitorCommentDTO;
+import com.zrlog.model.Comment;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class BlogApiArticleController extends Controller {
 
@@ -27,5 +30,11 @@ public class BlogApiArticleController extends Controller {
     public ApiStandardResponse<PageData<ArticleBasicDTO>> index() {
         String key = getRequest().getParaToStr("key", "");
         return new ApiStandardResponse<>(articleService.pageByKeywords(ControllerUtil.getPageRequest(this), key, getRequest()));
+    }
+
+    @ResponseBody
+    @RequestMethod
+    public ApiStandardResponse<List<VisitorCommentDTO>> comment() throws SQLException {
+        return new ApiStandardResponse<>(new Comment().visitorFindAllByLogId(Integer.parseInt(request.getParaToStr("id", ""))));
     }
 }
