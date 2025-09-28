@@ -302,70 +302,15 @@ aside li a:hover {
 /* Comment Styles */
 .comment {
     margin-bottom: 10px;
+    margin-top: 10px;
     padding: 10px 10px 20px 10px;
     box-shadow: 0 0 2px rgb(0 0 0 / 20%);
 }
 
-.comment h2 {
-    font-weight: normal;
-    margin-bottom: 10px;
-    font-size: 20px;
-}
-
-.comment label {
-    width: 42px;
-    height: auto;
-    padding: .5rem;
-}
-
-.comment input[type=text],
-.comment textarea {
-    margin: 0;
-    outline: none;
-}
-
 .comment textarea {
     border-width: 1px;
-    border-color: #DDDDDD #E4E4E4 #E4E4E4 #DDDDDD;
     border-style: solid;
     height: 146px;
-}
-
-.comment li {
-    border-bottom: 1px dotted #F2F2f2;
-    padding: 10px;
-    margin-bottom: 1.2rem;
-}
-
-.comment li p {
-    margin-bottom: 0;
-    word-break: break-all;
-}
-
-.comment li.even {
-    background-color: #F8F8F8;
-}
-
-.comment p.small {
-    font-size: 11px;
-    margin-bottom: 0;
-    text-align: right;
-}
-
-.comment form p {
-    margin-bottom: 10px;
-}
-
-.comment .comment-write {
-    width: 100%;
-}
-
-.comment .comment-write textarea {
-    width: 100%;
-}
-
-.comment .comment-write textarea:focus {
-    box-shadow: 0 0 5px #DDDDDD;
 }
 
 /* Responsive Styles */
@@ -560,8 +505,8 @@ li.page-item {
 }
 
 .markdown-body pre {
-    padding: 0!important;
-    border-radius: 4px!important;
+    padding: 0 !important;
+    border-radius: 4px !important;
 }
 
 @media (prefers-color-scheme: light) {

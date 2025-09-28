@@ -7,31 +7,28 @@ import com.hibegin.common.util.LoggerUtil;
 import com.hibegin.common.util.StringUtils;
 import com.hibegin.http.HttpMethod;
 import com.hibegin.http.annotation.RequestMethod;
-import com.hibegin.http.annotation.ResponseBody;
 import com.hibegin.http.server.api.HttpRequest;
 import com.hibegin.http.server.api.HttpResponse;
 import com.hibegin.http.server.web.Controller;
-import com.zrlog.blog.business.rest.request.CreateCommentRequest;
-import com.zrlog.blog.business.rest.response.CreateCommentResponse;
 import com.zrlog.blog.business.service.ArticleService;
-import com.zrlog.blog.business.service.CommentService;
 import com.zrlog.blog.web.util.PagerUtil;
 import com.zrlog.blog.web.util.PagerVO;
 import com.zrlog.blog.web.util.WebTools;
+import com.zrlog.business.plugin.PluginCorePlugin;
 import com.zrlog.business.plugin.StaticSitePlugin;
 import com.zrlog.common.CacheService;
 import com.zrlog.common.Constants;
 import com.zrlog.common.cache.dto.TypeDTO;
+import com.zrlog.common.vo.AdminTokenVO;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
 import com.zrlog.model.Log;
 import com.zrlog.util.I18nUtil;
 import com.zrlog.util.ParseUtil;
-import com.zrlog.util.ZrLogUtil;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Safelist;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
@@ -39,7 +36,6 @@ import java.util.logging.Logger;
 public class ArticleController extends Controller {
 
     private static final Logger LOGGER = LoggerUtil.getLogger(ArticleController.class);
-    private final CommentService commentService = new CommentService();
     private final ArticleService articleService = new ArticleService();
     private final CacheService cacheService;
 
@@ -125,25 +121,15 @@ public class ArticleController extends Controller {
     }
 
     @RequestMethod(method = HttpMethod.POST)
-    public void addComment() throws SQLException {
-        CreateCommentResponse x = saveComment();
-        String ext = "";
-        if (Constants.isStaticHtmlStatus()) {
-            ext = ".html";
-            if (!Constants.zrLogConfig.getServerConfig().isNativeImageAgent()) {
-                cacheService.refreshInitData();
-            }
-        }
-        response.redirect("/" + Constants.getArticleUri() + x.getAlias() + ext);
+    public void addComment() throws IOException, URISyntaxException, InterruptedException {
+        saveComment();
     }
 
     @RequestMethod(method = HttpMethod.POST)
-    @ResponseBody
-    public CreateCommentResponse saveComment() throws SQLException {
-        CreateCommentRequest createCommentRequest = ZrLogUtil.convertRequestParam(getRequest().decodeParamMap(), CreateCommentRequest.class);
-        createCommentRequest.setIp(WebTools.getRealIp(getRequest()));
-        createCommentRequest.setUserAgent(Jsoup.clean(request.getHeader("User-Agent"), Safelist.basic()));
-        return commentService.save(createCommentRequest);
+    public void saveComment() throws IOException, URISyntaxException, InterruptedException {
+        PluginCorePlugin pluginCorePlugin = Constants.zrLogConfig.getPlugin(PluginCorePlugin.class);
+        AdminTokenVO adminTokenVO = Objects.nonNull(Constants.zrLogConfig.getTokenService()) ? Constants.zrLogConfig.getTokenService().getAdminTokenVO(request) : null;
+        pluginCorePlugin.accessPlugin("/p/comment/addComment", request, response, adminTokenVO);
     }
 
     @RequestMethod
