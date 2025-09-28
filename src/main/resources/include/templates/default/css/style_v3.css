@@ -56,7 +56,7 @@ a:focus, a:active {
     clear: both;
 }
 
-input[type=text], textarea {
+input[type=text] {
     border-width: 1px;
     border-style: solid;
     border-color: #DDDDDD #E4E4E4 #E4E4E4 #DDDDDD;
@@ -64,7 +64,6 @@ input[type=text], textarea {
     padding: .5rem;
     vertical-align: middle;
     outline: none;
-    resize: none;
 }
 
 .hidden {
@@ -307,12 +306,6 @@ aside li a:hover {
     box-shadow: 0 0 2px rgb(0 0 0 / 20%);
 }
 
-.comment textarea {
-    border-width: 1px;
-    border-style: solid;
-    height: 146px;
-}
-
 /* Responsive Styles */
 @media screen and (max-width: 1280px) {
     body {
@@ -381,19 +374,6 @@ aside li a:hover {
 
     .albums .container {
         width: 720px;
-    }
-
-    .comments-wrapper {
-        width: auto;
-    }
-
-    .comment .comment-write, .comments-wrapper .input-group {
-        float: none;
-        width: 100%;
-    }
-
-    .comment label {
-        float: none;
     }
 
     .pager-nav p.next, .pager-nav p {
