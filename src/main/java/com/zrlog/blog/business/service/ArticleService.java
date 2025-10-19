@@ -16,7 +16,6 @@ import com.zrlog.common.vo.Outline;
 import com.zrlog.common.vo.PublicWebSiteInfo;
 import com.zrlog.data.dto.ArticleBasicDTO;
 import com.zrlog.data.dto.ArticleDetailDTO;
-import com.zrlog.data.dto.VisitorCommentDTO;
 import com.zrlog.model.Log;
 import com.zrlog.util.I18nUtil;
 import com.zrlog.util.ParseUtil;
@@ -84,14 +83,16 @@ public class ArticleService {
 
     public static <T extends ArticleBasicDTO> T handlerArticle(T log, HttpRequest request) {
         String suffix = StaticSitePlugin.getSuffix(request);
-        String aliasUrl = UrlEncodeUtils.encodeUrl(log.getAlias()) + suffix;
+        String originalAlias = log.getAlias();
+        String aliasUrl = UrlEncodeUtils.encodeUrl(originalAlias) + suffix;
+        String articleUrl = WebTools.buildEncodedUrl(request, Constants.getArticleUri() + originalAlias + suffix);
         log.setAlias(aliasUrl);
+        log.setUrl(articleUrl);
         log.setRubbish(ResultValueConvertUtils.toBoolean(log.getRubbish()));
         log.setPrivacy(ResultValueConvertUtils.toBoolean(log.getPrivacy()));
         log.setHot(ResultValueConvertUtils.toBoolean(log.getHot()));
         PublicWebSiteInfo publicWebSiteInfo = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
         log.setCanComment(ResultValueConvertUtils.toBoolean(log.getCanComment()) && Objects.equals(publicWebSiteInfo.getDisable_comment_status(), false));
-        log.setUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + log.getAlias()));
         log.setTypeUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "sort/" + log.getTypeAlias() + suffix));
         log.setNoSchemeUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + UrlEncodeUtils.encodeUrl(log.getAlias()));
         log.setCommentUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + "addComment");
