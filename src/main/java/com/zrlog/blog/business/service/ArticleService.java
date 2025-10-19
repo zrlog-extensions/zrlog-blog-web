@@ -94,7 +94,7 @@ public class ArticleService {
         PublicWebSiteInfo publicWebSiteInfo = Constants.zrLogConfig.getCacheService().getPublicWebSiteInfo();
         log.setCanComment(ResultValueConvertUtils.toBoolean(log.getCanComment()) && Objects.equals(publicWebSiteInfo.getDisable_comment_status(), false));
         log.setTypeUrl(WebTools.buildEncodedUrl(request, Constants.getArticleUri() + "sort/" + log.getTypeAlias() + suffix));
-        log.setNoSchemeUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + UrlEncodeUtils.encodeUrl(log.getAlias()));
+        log.setNoSchemeUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + aliasUrl);
         log.setCommentUrl(ZrLogUtil.getHomeUrlWithHost(request) + Constants.getArticleUri() + "addComment");
         //
         log.setRecommended(ResultValueConvertUtils.toBoolean(log.getRecommended()));
