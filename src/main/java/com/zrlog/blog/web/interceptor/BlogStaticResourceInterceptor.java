@@ -8,6 +8,7 @@ import com.hibegin.http.server.util.MimeTypeUtil;
 import com.hibegin.http.server.util.PathUtil;
 import com.zrlog.blog.web.plugin.BlogPageStaticSitePlugin;
 import com.zrlog.common.Constants;
+import com.zrlog.common.exception.UnknownException;
 import com.zrlog.plugin.BaseStaticSitePlugin;
 import com.zrlog.util.StaticFileCacheUtils;
 import com.zrlog.util.ZrLogUtil;
@@ -51,7 +52,7 @@ public class BlogStaticResourceInterceptor implements HandleAbleInterceptor {
                     return false;
                 }
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                throw new UnknownException(ex);
             }
         }
         BlogPageStaticSitePlugin staticSitePlugin = Constants.zrLogConfig.getPlugin(BlogPageStaticSitePlugin.class);
